@@ -1,0 +1,9 @@
+name = "workflow-analyzer"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".vercel/output/static"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "workflow-analyzer"
+database_id = "eab21ec6-0c35-474a-a5ed-c463a2d10f8f"

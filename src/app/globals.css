@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-slate-800;
+  }
+
+  body {
+    @apply bg-slate-950 text-slate-100 antialiased;
+  }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { @apply bg-slate-900; }
+  ::-webkit-scrollbar-thumb { @apply bg-slate-600 rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-slate-500; }
+}
+
+@layer utilities {
+  .gradient-text {
+    @apply bg-gradient-to-r from-cyan-400 to-violet-400 bg-clip-text text-transparent;
+  }
+  .glass {
+    @apply bg-slate-900/60 backdrop-blur-md border border-slate-800;
+  }
+  .react-flow__background { background-color: #020817 !important; }
+  .react-flow__edge-path { stroke-width: 2; }
+  .react-flow__controls {
+    @apply bg-slate-800 border border-slate-700 rounded-lg overflow-hidden shadow-xl;
+  }
+  .react-flow__controls-button {
+    @apply bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white;
+  }
+  .react-flow__minimap {
+    @apply bg-slate-900 border border-slate-700 rounded-lg;
+  }
+}
