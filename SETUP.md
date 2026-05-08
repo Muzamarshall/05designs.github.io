@@ -153,3 +153,50 @@ When a client submits their analysis:
 3. Or go to `/admin` to edit the message first, then approve
 
 The client receives a personalised email with a link to their full analysis report.
+
+---
+
+## 10. PayPal (Global payments — 200+ countries)
+
+1. Go to [developer.paypal.com](https://developer.paypal.com) → Log in or create a Business account
+2. Navigate to **Dashboard** → **Apps & Credentials**
+3. Click **Create App** (choose "Merchant" type)
+4. Copy the **Client ID** → set as `PAYPAL_CLIENT_ID`
+5. Copy the **Secret** → set as `PAYPAL_CLIENT_SECRET`
+6. For testing: leave `PAYPAL_ENV=sandbox` and use PayPal's sandbox accounts
+7. For live: change to `PAYPAL_ENV=production` and use your live credentials
+
+PayPal supports USD payments from customers in 200+ countries including:
+South Africa, Nigeria, Kenya, Ghana, Egypt, Uganda, Tanzania, and more.
+
+---
+
+## 11. PayNow Zimbabwe (EcoCash, OneMoney, TeleCash, Web Pay)
+
+PayNow is Zimbabwe's leading payment gateway supporting:
+- **EcoCash** — Econet mobile money
+- **OneMoney** — NetOne mobile money
+- **TeleCash** — Telecel mobile money
+- **Web Pay** — Visa/Mastercard via PayNow's hosted page
+
+### Setup Steps
+
+1. Go to [developers.paynow.co.zw](https://developers.paynow.co.zw) or [paynow.co.zw](https://www.paynow.co.zw)
+2. Register for a merchant/business account
+3. Verify your business
+4. Navigate to **Integrations** → **Create Integration**
+5. Set your **Result URL** (webhook) to: `https://yourdomain.com/api/payment/paynow/result`
+6. Set your **Return URL** to: `https://yourdomain.com/payment/success`
+7. Copy the **Integration ID** → set as `PAYNOW_INTEGRATION_ID`
+8. Copy the **Integration Key** → set as `PAYNOW_INTEGRATION_KEY`
+
+### Testing PayNow
+
+PayNow provides a test environment. Use these test details:
+- Integration ID: `XXXXX` (from your developer dashboard)
+- Integration Key: `XXXXX`
+- Test EcoCash number: Use any valid Zimbabwean number format (+263 7X XXX XXXX)
+
+### Supported Currencies
+
+PayNow processes in **USD** and **ZWL** (Zimbabwean Dollar). The app sends USD amounts.

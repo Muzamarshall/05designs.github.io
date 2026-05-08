@@ -1,22 +1,53 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Download, ExternalLink, Loader2 } from "lucide-react";
+import { CheckCircle, Download, ExternalLink, Loader2, AlertCircle } from "lucide-react";
 import Header from "@/components/layout/Header";
 
 function SuccessContent() {
   const params = useSearchParams();
   const sessionId = params.get("session_id");
+  const gateway = params.get("gateway") ?? "stripe";
+  const productType = params.get("product") ?? "pdf";
+  // PayPal returns token (order ID) and PayerID on redirect back
+  const paypalOrderId = params.get("token");
+
   const [pdfReady, setPdfReady] = useState(false);
+  const [capturing, setCapturing] = useState(false);
+  const [captureError, setCaptureError] = useState<string | null>(null);
+  const [captureComplete, setCaptureComplete] = useState(false);
+
+  // For PayPal: capture the order as soon as the success page loads
+  const capturePayPal = useCallback(async () => {
+    if (!paypalOrderId || !sessionId || captureComplete) return;
+    setCapturing(true);
+    try {
+      const res = await fetch("/api/payment/paypal/capture", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderId: paypalOrderId, sessionId, productType }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setCaptureComplete(true);
+    } catch (err) {
+      setCaptureError(err instanceof Error ? err.message : "Capture failed");
+    } finally {
+      setCapturing(false);
+    }
+  }, [paypalOrderId, sessionId, productType, captureComplete]);
 
   useEffect(() => {
-    // Give a moment for the webhook to process, then show PDF option
-    const timer = setTimeout(() => setPdfReady(true), 2000);
+    if (gateway === "paypal" && paypalOrderId) {
+      capturePayPal();
+    }
+    // Give a moment for webhooks to process before allowing PDF download
+    const timer = setTimeout(() => setPdfReady(true), 2500);
     return () => clearTimeout(timer);
-  }, []);
+  }, [gateway, paypalOrderId, capturePayPal]);
 
   async function downloadPdf() {
     if (!sessionId) return;
